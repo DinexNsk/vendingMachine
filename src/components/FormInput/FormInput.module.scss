@@ -1,0 +1,41 @@
+@import '../../styles/variables.scss';
+
+%inputStyles {
+  position: relative;
+  border-radius: 0.2em;
+};
+
+.form {
+  &__label {
+    @extend %darkGreenBorder;
+    height: 3.5em;
+    border-width: 0.1em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 0.5em 0 0.5em;
+    margin-bottom: 1em;
+  }
+
+  &__inputContainer {
+    @extend %inputStyles;
+    height: 3em;
+    width: 100%;
+    background-color: rgba(255,255,255,0.3);
+  }
+
+  &__input {
+    @extend %inputStyles;
+    font-size: 1em;
+    width: calc(100% - 2em);
+    height: 3em;
+    padding: 0 1em 0 1em;
+    background-color: transparent;
+    border: none;
+    color: $white;
+    font-weight: 400;
+    outline: none;
+    vertical-align: middle;
+  }
+}

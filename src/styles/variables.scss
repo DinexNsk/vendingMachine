@@ -1,0 +1,9 @@
+$white: #fafafa; 
+$darkGrey: #3D3D3E;
+$lightGrey: #808080;
+$darkGreen: #163C17;
+
+%darkGreenBorder {
+    border: 0.1em solid $darkGreen;
+    border-radius: 0.2em;
+};

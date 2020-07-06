@@ -1,0 +1,38 @@
+@import '../../styles/variables.scss';
+
+.item {
+    flex: 0 0 calc(33% - 1.8em);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: $darkGreen;
+    border-radius: 0.2em;
+    margin: 0.4em;
+    padding: 0.5em;
+
+    &__withCheckmark {
+        display: flex;
+        justify-content: space-between;
+         width: 100%
+    }
+
+    &__productName {
+        font-size: 0.8em;
+    }
+
+    &__orderInfo {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+    }
+
+    &__cost {
+        line-height: 1.1em;
+    }
+
+    &__productNumber {
+        font-size: 1.6em;
+        line-height: 1em;
+    }
+}

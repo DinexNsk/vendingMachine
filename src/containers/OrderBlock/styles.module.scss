@@ -1,0 +1,10 @@
+@import "../../styles/variables.scss";
+
+.orderBlock {
+    flex: 1;
+    background-color: $darkGrey;
+    padding: 1em;
+    width: 100%;
+    overflow-y: scroll;
+    min-width: 16em;
+}

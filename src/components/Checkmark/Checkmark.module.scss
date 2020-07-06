@@ -1,0 +1,40 @@
+@import '../../styles/variables.scss';
+
+%fullSize {
+    width: 22px;
+    height:22px;
+}
+
+.checkmark {
+    @extend %fullSize;
+    display:inline-block;
+    transform: rotate(45deg);
+
+    &__circle {
+        @extend %fullSize;
+        position: absolute;
+        left:0;
+        top:0;
+        background-color: green;
+        border-radius:11px;
+    }
+
+    &__stem {
+        position: absolute;
+        left:11px;
+        top:6px;
+        width:3px;
+        height:9px;
+        background-color: $white;
+    }
+
+    &__kick {
+        position: absolute;
+        left:8px;
+        top:12px;
+        width:3px;
+        height:3px;
+        background-color: $white;
+    }
+
+}

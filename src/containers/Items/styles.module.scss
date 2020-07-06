@@ -1,0 +1,15 @@
+@import '../../styles/variables';
+
+.items {
+    flex: 2;
+    background-color: $lightGrey;
+    padding: 0.5em;
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 16em;
+    }
+}
+
+
