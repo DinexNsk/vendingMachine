@@ -1,58 +1,48 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import styles from './styles.module.scss';
 import { Form } from '../../components/Form/Form';
 import { Output } from '../../components/Output/Output';
-import { ItemsData, ItemData } from '../types';
+import { selectors } from '../../redux/selectors';
+import { setMoneyAmount, setSelectedItem, setChange } from '../../redux/currentOperation/actions';
+import { findHighestPrice, isNumber } from '../../utils/utils';
+import { banknotes, coins } from '../../utils/data';
 
-const banknotes: number[] = [50, 100, 200, 500, 1000];
+import styles from './styles.module.scss';
 
-interface OrderBlockProps {
-    items: ItemsData,
-    ids: number[],
-    moneyAmount: number;
-    setMoneyAmount: React.Dispatch<React.SetStateAction<number>>,
-    maxCost: number,
-}
 
-export const OrderBlock = ({
-    items,
-    ids,
-    moneyAmount,
-    setMoneyAmount,
-    maxCost,
-}: OrderBlockProps) => {
-    const [moneyFormLabel, setMoneyFormLabel] = useState('Insert banknotes...');
-    const [selectedProductlabel, setSelectedProductlabel] = useState('.');
-    const [chosenItem, setChosenItem] = useState<ItemData | undefined>(undefined);
+export const OrderBlock = () => {
+    const items = useSelector(selectors.items).data;
+    const {
+        moneyAmount,
+        selectedItem,
+        changeAmount,
+    } = useSelector(selectors.currentOperation);
+    const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (moneyAmount > 0) {
+    const [moneyFormLabel, setMoneyFormLabel] = useState('');
+    const [selectedProductlabel, setSelectedProductlabel] = useState('');
+
+    const maxCost = useMemo(() => findHighestPrice(items), [items]);
+
+    const validateSubmitMoney = (value: string | number) => {
+        if (!isNumber(value)) {
+            setMoneyFormLabel('Banknote must be a number!');
+        } else if (!banknotes.includes(Number(value))) {
+            setMoneyFormLabel('Unknown banknote!')
+        } else {
+            const moneySum = moneyAmount + Number(value);
+
+            dispatch(setMoneyAmount(moneySum));
+            setMoneyFormLabel(`Inserted money: ${moneySum}`);
             setSelectedProductlabel('Choose product...')
-        };
-    }, [moneyAmount]);
-
-    const validateSubmitMoney = useCallback((value) => {
-        if (isNaN(value)) {
-            return setMoneyFormLabel('Banknote must be a number!');
-        };
-        if (!banknotes.includes(Number(value))) {
-           return setMoneyFormLabel('Unknown banknote!')
-        };
-
-        const moneySum = moneyAmount + Number(value);
-        setMoneyAmount(moneySum);
-        setMoneyFormLabel(`Inserted money: ${moneySum}`);
-        return;
-    }, [moneyAmount, setMoneyAmount]);
+        }
+    };
 
 
-    const validateSubmitProductNumber = useCallback((value) => {
-        if (isNaN(value)) {
+    const validateSubmitProductNumber = (value: string | number) => {
+        if (!isNumber(value)) {
             return setSelectedProductlabel('Choice must be a number!');
-        };
-        if (!ids.includes(Number(value))) {
-            return setSelectedProductlabel('Enter the correct number!');
         };
         const element = items.find(el => el.productId === Number(value));
     
@@ -64,46 +54,43 @@ export const OrderBlock = ({
         };
 
         setSelectedProductlabel('Success!');
-        setChosenItem(element);
+        dispatch(setSelectedItem(element));
+        dispatch(setChange(moneyAmount - Number(element.cost)));
         return;
-    }, [ids, items, moneyAmount])
+    };
 
-    const onSubmitMoney = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
+    const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter') {
             const value = (event.target as HTMLInputElement).value;
-            validateSubmitMoney(value);
+            const name = (event.target as HTMLInputElement).name;
+
+            name === 'money' ? validateSubmitMoney(value) : validateSubmitProductNumber(value);
         }
-    }, [validateSubmitMoney]);
-
-
-    const onSubmitProductNumber = useCallback((event: React.KeyboardEvent<HTMLInputElement>) => {
-        if(event.key === 'Enter') {
-            const value = (event.target as HTMLInputElement).value;
-            validateSubmitProductNumber(value);
-        }
-    }, [validateSubmitProductNumber]);
-
-    const moneyChange = chosenItem ? (moneyAmount - chosenItem.cost) : null;
+    };
 
     return (
         <div className={styles.orderBlock}>
             <Form 
                 bonusText='Available banknotes: 50, 100, 200, 500 or 1000 R. The machine gives change in 1, 2, 5 and 10 R coins.'
-                onSubmit={onSubmitMoney}
+                onSubmit={onSubmit}
                 labelText={moneyFormLabel}
                 disabled={moneyAmount >= maxCost}
                 additionalLabelText = {moneyAmount >= maxCost && 'Enough for any product!'}
+                name='money'
+                defaultLabel='Insert banknotes...'
             />
             <Form 
-                onSubmit={onSubmitProductNumber}
+                onSubmit={onSubmit}
                 labelText={selectedProductlabel}
                 disabled={moneyAmount === 0}
+                name='productNumber'
+                defaultLabel='.'
             />
 
             <Output
-                boughtItem={chosenItem}
-                moneyChange={moneyChange}
-                coins={[1, 2, 5, 10]}
+                boughtItem={selectedItem}
+                moneyChange={changeAmount}
+                coins={coins}
             />
         </div>
     )

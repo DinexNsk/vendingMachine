@@ -6,7 +6,9 @@ interface FormInputProps {
     labelText: string,
     onSubmit: (event: React.KeyboardEvent<HTMLInputElement>) => void,
     disabled: boolean,
-    additionalLabelText?: string | false
+    additionalLabelText?: string | false,
+    name?: string,
+    defaultLabel?: string,
 }
 
 export const FormInput = ({
@@ -14,11 +16,13 @@ export const FormInput = ({
     onSubmit,
     disabled,
     additionalLabelText,
+    name,
+    defaultLabel = '',
 }: FormInputProps) => {
     return (
         <>
             <label className={styles.form__label}>
-                <div>{labelText}</div>
+                <div>{labelText || defaultLabel}</div>
                 {additionalLabelText && <div>{additionalLabelText}</div>}
             </label>
             <div className={styles.form__inputContainer}>
@@ -27,6 +31,7 @@ export const FormInput = ({
                     className={styles.form__input}
                     onKeyDown={onSubmit}
                     disabled={disabled}
+                    name={name}
                 />
             </div>
         </>

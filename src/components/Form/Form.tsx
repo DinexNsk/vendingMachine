@@ -8,6 +8,8 @@ interface FormProps {
     labelText: string,
     disabled: boolean,
     additionalLabelText?: string | false,
+    name?: string,
+    defaultLabel?: string;
 }
 
 export const Form = ({
@@ -16,6 +18,8 @@ export const Form = ({
     labelText,
     disabled,
     additionalLabelText,
+    name,
+    defaultLabel
 }: FormProps) => {
     return (
         <div className={styles.form}>   
@@ -24,6 +28,8 @@ export const Form = ({
                 labelText={labelText} 
                 disabled={disabled} 
                 additionalLabelText={additionalLabelText}
+                name={name}
+                defaultLabel={defaultLabel}
             />
             {bonusText && <div className={styles.form__bonusText}>{bonusText}</div>}
         </div>

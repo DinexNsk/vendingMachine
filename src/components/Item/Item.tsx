@@ -3,22 +3,24 @@ import React from 'react';
 import styles from './Item.module.scss';
 import Checkmark from '../Checkmark/Checkmark';
 
-import { ItemData } from '../../containers/types';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../redux/selectors';
+import { ItemType } from '../../redux/items/types';
 
 interface ItemProps {
-    item: ItemData,
-    moneyAmount: number,
+    item: Partial<ItemType>,
 }
 
 export const Item = ({
     item,
-    moneyAmount,
 }: ItemProps) => {
+    const moneyAmount = useSelector(selectors.currentOperation).moneyAmount;
+    
     return (
         <div className={styles.item}>
             <div className={styles.item__withCheckmark}>
                 <div>{item.companyName}</div>
-                {moneyAmount >= item.cost && <Checkmark />}
+                {moneyAmount >= Number(item.cost) && <Checkmark />}
             </div>
             <div className={styles.item__productName}>
                 {item.productName}
