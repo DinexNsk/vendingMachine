@@ -8,13 +8,15 @@ import { DisplayChange } from './DisplayChange';
 interface Props {
     boughtItem: Partial<ItemType>,
     moneyChange: number | null,
-    coins: number[]
+    coins: number[],
+    onClick: () => void,
 }
 
 export const Output = ({
     boughtItem,
     moneyChange,
     coins,
+    onClick,
 }: Props) => {
     const isNotEmpty = Object.keys(boughtItem).length !== 0;
     const textStatus = isNotEmpty ? 'Take your product and change!' : '';
@@ -29,7 +31,7 @@ export const Output = ({
                     {isNotEmpty && <DisplayChange coins={coins} moneyChange={moneyChange} />}
                 </div>
                 <div className={styles.output__boughtProduct}>
-                    {isNotEmpty && <Item item={boughtItem} />}
+                    {isNotEmpty && <Item item={boughtItem} onClick={onClick}/>}
                 </div>
             </div>
         </div>

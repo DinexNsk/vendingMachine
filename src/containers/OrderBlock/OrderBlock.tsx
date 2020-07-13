@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form } from '../../components/Form/Form';
 import { Output } from '../../components/Output/Output';
 import { selectors } from '../../redux/selectors';
-import { setMoneyAmount, setSelectedItem, setChange } from '../../redux/currentOperation/actions';
+import { setMoneyAmount, setSelectedItem, setChange, clearCurrentOperation } from '../../redux/currentOperation/actions';
 import { findHighestPrice, isNumber } from '../../utils/utils';
 import { banknotes, coins } from '../../utils/data';
 
@@ -59,6 +59,11 @@ export const OrderBlock = () => {
         return;
     };
 
+    const onClick = () => {
+        dispatch(clearCurrentOperation());
+        window.location.reload();
+    }
+
     const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if(event.key === 'Enter') {
             const value = (event.target as HTMLInputElement).value;
@@ -91,6 +96,7 @@ export const OrderBlock = () => {
                 boughtItem={selectedItem}
                 moneyChange={changeAmount}
                 coins={coins}
+                onClick={onClick}
             />
         </div>
     )
