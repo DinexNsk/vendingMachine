@@ -59,9 +59,10 @@ export const OrderBlock = () => {
         return;
     };
 
-    const onClick = () => {
+    const formReset = () => {
         dispatch(clearCurrentOperation());
-        window.location.reload();
+        setMoneyFormLabel('');
+        setSelectedProductlabel('');
     }
 
     const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -75,29 +76,30 @@ export const OrderBlock = () => {
 
     return (
         <div className={styles.orderBlock}>
-            <Form 
-                bonusText='Available banknotes: 50, 100, 200, 500 or 1000 R. The machine gives change in 1, 2, 5 and 10 R coins.'
-                onSubmit={onSubmit}
-                labelText={moneyFormLabel}
-                disabled={moneyAmount >= maxCost}
-                additionalLabelText = {moneyAmount >= maxCost && 'Enough for any product!'}
-                name='money'
-                defaultLabel='Insert banknotes...'
-            />
-            <Form 
-                onSubmit={onSubmit}
-                labelText={selectedProductlabel}
-                disabled={moneyAmount === 0}
-                name='productNumber'
-                defaultLabel='.'
-            />
+            <form onReset={formReset}>
+                <Form
+                    bonusText='Available banknotes: 50, 100, 200, 500 or 1000 R. The machine gives change in 1, 2, 5 and 10 R coins.'
+                    onSubmit={onSubmit}
+                    labelText={moneyFormLabel}
+                    disabled={moneyAmount >= maxCost}
+                    additionalLabelText={moneyAmount >= maxCost && 'Enough for any product!'}
+                    name='money'
+                    defaultLabel='Insert banknotes...'
+                />
+                <Form
+                    onSubmit={onSubmit}
+                    labelText={selectedProductlabel}
+                    disabled={moneyAmount === 0}
+                    name='productNumber'
+                    defaultLabel='.'
+                />
 
-            <Output
-                boughtItem={selectedItem}
-                moneyChange={changeAmount}
-                coins={coins}
-                onClick={onClick}
-            />
+                <Output
+                    boughtItem={selectedItem}
+                    moneyChange={changeAmount}
+                    coins={coins}
+                />
+            </form>
         </div>
     )
 }

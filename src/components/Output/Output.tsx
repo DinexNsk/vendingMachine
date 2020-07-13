@@ -9,7 +9,7 @@ interface Props {
     boughtItem: Partial<ItemType>,
     moneyChange: number | null,
     coins: number[],
-    onClick: () => void,
+    onClick?: () => void,
 }
 
 export const Output = ({
@@ -31,7 +31,10 @@ export const Output = ({
                     {isNotEmpty && <DisplayChange coins={coins} moneyChange={moneyChange} />}
                 </div>
                 <div className={styles.output__boughtProduct}>
-                    {isNotEmpty && <Item item={boughtItem} onClick={onClick}/>}
+                    {isNotEmpty 
+                        && <button type='reset' className={styles.output__button}>
+                            <Item item={boughtItem} onClick={onClick}/>
+                        </button>}
                 </div>
             </div>
         </div>
