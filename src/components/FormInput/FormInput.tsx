@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import styles from './FormInput.module.scss';
 
@@ -11,14 +11,14 @@ interface FormInputProps {
     defaultLabel?: string,
 }
 
-export const FormInput = ({
+export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({
     labelText,
     onSubmit,
     disabled,
     additionalLabelText,
     name,
     defaultLabel = '',
-}: FormInputProps) => {
+}, ref) => {
     return (
         <>
             <label className={styles.form__label}>
@@ -32,8 +32,9 @@ export const FormInput = ({
                     onKeyDown={onSubmit}
                     disabled={disabled}
                     name={name}
+                    ref={ref}
                 />
             </div>
         </>
     )
-}
+})

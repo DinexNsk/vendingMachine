@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, MutableRefObject } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Form } from '../../components/Form/Form';
@@ -24,6 +24,9 @@ export const OrderBlock = () => {
     const [selectedProductlabel, setSelectedProductlabel] = useState('');
 
     const maxCost = useMemo(() => findHighestPrice(items), [items]);
+
+    const refMoney = useRef() as MutableRefObject<HTMLInputElement>
+    const refProductNumber = useRef() as MutableRefObject<HTMLInputElement>
 
     const validateSubmitMoney = (value: string | number) => {
         if (!isNumber(value)) {
@@ -61,7 +64,10 @@ export const OrderBlock = () => {
 
     const onClick = () => {
         dispatch(clearCurrentOperation());
-        window.location.reload();
+        refMoney.current.value = '';
+        refProductNumber.current.value = '';
+        setMoneyFormLabel('');
+        setSelectedProductlabel('');
     }
 
     const onSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -83,6 +89,7 @@ export const OrderBlock = () => {
                 additionalLabelText = {moneyAmount >= maxCost && 'Enough for any product!'}
                 name='money'
                 defaultLabel='Insert banknotes...'
+                ref={refMoney}
             />
             <Form 
                 onSubmit={onSubmit}
@@ -90,6 +97,7 @@ export const OrderBlock = () => {
                 disabled={moneyAmount === 0}
                 name='productNumber'
                 defaultLabel='.'
+                ref={refProductNumber}
             />
 
             <Output

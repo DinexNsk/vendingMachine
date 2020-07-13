@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styles from './Form.module.scss'
 import { FormInput } from '../FormInput/FormInput';
 
@@ -9,18 +9,18 @@ interface FormProps {
     disabled: boolean,
     additionalLabelText?: string | false,
     name?: string,
-    defaultLabel?: string;
+    defaultLabel?: string,
 }
 
-export const Form = ({
+export const Form = forwardRef<HTMLInputElement, FormProps>(({
     bonusText,
     onSubmit,
     labelText,
     disabled,
     additionalLabelText,
     name,
-    defaultLabel
-}: FormProps) => {
+    defaultLabel,
+}, ref) => {
     return (
         <div className={styles.form}>   
             <FormInput 
@@ -30,8 +30,9 @@ export const Form = ({
                 additionalLabelText={additionalLabelText}
                 name={name}
                 defaultLabel={defaultLabel}
+                ref={ref}
             />
             {bonusText && <div className={styles.form__bonusText}>{bonusText}</div>}
         </div>
     )
-}
+})
