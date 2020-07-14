@@ -4,12 +4,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Form } from '../../components/Form/Form';
 import { Output } from '../../components/Output/Output';
 import { selectors } from '../../redux/selectors';
-import { setMoneyAmount, setSelectedItem, setChange } from '../../redux/currentOperation/actions';
+import { setMoneyAmount, setSelectedItem, setChange, setMoneyLabel, setProductNumberLabel, clearCurrentOperation } from '../../redux/currentOperation/actions';
 import { findHighestPrice, isNumber } from '../../utils/utils';
 import { banknotes, coins } from '../../utils/data';
 
 import styles from './styles.module.scss';
 
+
+const defaultState = {
+    money: '',
+    productNumber: '',
+}
 
 export const OrderBlock = () => {
     const items = useSelector(selectors.items).data;
@@ -17,13 +22,22 @@ export const OrderBlock = () => {
         moneyAmount,
         selectedItem,
         changeAmount,
+        moneyLabel,
+        productNumberLabel,
     } = useSelector(selectors.currentOperation);
     const dispatch = useDispatch();
 
-    const [moneyFormLabel, setMoneyFormLabel] = useState('');
-    const [selectedProductlabel, setSelectedProductlabel] = useState('');
+    const [inputValues, setInputValues] = useState(defaultState);
 
     const maxCost = useMemo(() => findHighestPrice(items), [items]);
+
+    const setMoneyFormLabel = (text: string) => {
+        dispatch(setMoneyLabel(text));
+    }
+
+    const setSelectedProductlabel = (text: string) => {
+        dispatch(setProductNumberLabel(text));
+    }
 
     const validateSubmitMoney = (value: string | number) => {
         if (!isNumber(value)) {
@@ -68,29 +82,44 @@ export const OrderBlock = () => {
         }
     };
 
+    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = (event.target as HTMLInputElement).value;
+        const name = (event.target as HTMLInputElement).name;
+
+        setInputValues({...inputValues, [name]: value}) ;
+    }
+
+    const resetData = () => {
+        dispatch(clearCurrentOperation());
+        setInputValues(defaultState);
+    }
+
     return (
         <div className={styles.orderBlock}>
             <Form 
                 bonusText='Available banknotes: 50, 100, 200, 500 or 1000 R. The machine gives change in 1, 2, 5 and 10 R coins.'
                 onSubmit={onSubmit}
-                labelText={moneyFormLabel}
+                labelText={moneyLabel}
                 disabled={moneyAmount >= maxCost}
-                additionalLabelText = {moneyAmount >= maxCost && 'Enough for any product!'}
                 name='money'
-                defaultLabel='Insert banknotes...'
+                additionalLabelText = {moneyAmount >= maxCost && 'Enough for any product!'}
+                value={inputValues.money}
+                onChange={onChange}
             />
             <Form 
                 onSubmit={onSubmit}
-                labelText={selectedProductlabel}
+                labelText={productNumberLabel}
                 disabled={moneyAmount === 0}
                 name='productNumber'
-                defaultLabel='.'
+                value={inputValues.productNumber}
+                onChange={onChange}
             />
 
             <Output
                 boughtItem={selectedItem}
                 moneyChange={changeAmount}
                 coins={coins}
+                onClick={resetData}
             />
         </div>
     )

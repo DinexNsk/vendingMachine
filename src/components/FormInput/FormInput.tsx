@@ -9,6 +9,8 @@ interface FormInputProps {
     additionalLabelText?: string | false,
     name?: string,
     defaultLabel?: string,
+    value?: string,
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
 export const FormInput = ({
@@ -18,6 +20,8 @@ export const FormInput = ({
     additionalLabelText,
     name,
     defaultLabel = '',
+    value,
+    onChange,
 }: FormInputProps) => {
     return (
         <>
@@ -32,6 +36,8 @@ export const FormInput = ({
                     onKeyDown={onSubmit}
                     disabled={disabled}
                     name={name}
+                    value={value}
+                    onChange={onChange}
                 />
             </div>
         </>

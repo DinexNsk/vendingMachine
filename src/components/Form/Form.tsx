@@ -9,7 +9,9 @@ interface FormProps {
     disabled: boolean,
     additionalLabelText?: string | false,
     name?: string,
-    defaultLabel?: string;
+    defaultLabel?: string,
+    value?: string,
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
 export const Form = ({
@@ -19,7 +21,9 @@ export const Form = ({
     disabled,
     additionalLabelText,
     name,
-    defaultLabel
+    defaultLabel,
+    value,
+    onChange,
 }: FormProps) => {
     return (
         <div className={styles.form}>   
@@ -30,6 +34,8 @@ export const Form = ({
                 additionalLabelText={additionalLabelText}
                 name={name}
                 defaultLabel={defaultLabel}
+                value={value}
+                onChange={onChange}
             />
             {bonusText && <div className={styles.form__bonusText}>{bonusText}</div>}
         </div>

@@ -9,15 +9,17 @@ import { ItemType } from '../../redux/items/types';
 
 interface ItemProps {
     item: Partial<ItemType>,
+    onClick?: () => void,
 }
 
 export const Item = ({
     item,
+    onClick,
 }: ItemProps) => {
     const moneyAmount = useSelector(selectors.currentOperation).moneyAmount;
     
     return (
-        <div className={styles.item}>
+        <div className={styles.item} onClick={onClick}>
             <div className={styles.item__withCheckmark}>
                 <div>{item.companyName}</div>
                 {moneyAmount >= Number(item.cost) && <Checkmark />}
