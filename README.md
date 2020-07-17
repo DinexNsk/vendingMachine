@@ -20,3 +20,6 @@ The program should emulate the operation of the vending machine:
 ## Output result:
 1. display change rows (Example: '10 R: 8 coins, 5 R: 1 coins')
 2. display product;
+
+## Demo
+![](http://g.recordit.co/DmPfR55axA.gif)
